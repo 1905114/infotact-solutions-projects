@@ -6,7 +6,7 @@ export default function Orders() {
   const [orders, setOrders] = useState([]);
 
   const fetchOrders = () => {
-    API.get('/orders').then((res) =>
+    API.get('/order').then((res) =>
       setOrders(res.data)
     );
   };

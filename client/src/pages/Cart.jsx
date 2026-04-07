@@ -3,7 +3,6 @@ import API from '../api/api';
 
 export default function Cart() {
   const [cart, setCart] = useState(null);
-
   const fetchCart = () => {
     API.get('/cart').then((res) => setCart(res.data));
   };
@@ -12,14 +11,27 @@ export default function Cart() {
     fetchCart();
   }, []);
 
-  const placeOrder = async () => {
-    await API.post('/orders');
-    alert('Order placed!');
+ const placeOrder = async () => {
+  try {
+    alert("Button clicked"); // 👈 confirms click
+
+    const res = await API.post('/order');
+
+    alert("Order success: " + JSON.stringify(res.data));
+
     fetchCart();
-  };
+  } catch (err) {
+    alert(
+      "ERROR: " +
+        (err.response?.data?.message || err.message)
+    );
+  }
+};
 
-  if (!cart) return <p>Empty cart</p>;
-
+  // if (!cart) return <p>Empty cart</p>;
+if (!cart || cart.items.length === 0) {
+  return <p className="p-6">Cart is empty</p>;
+}
   return (
     // <div>
     //   <h2>Cart</h2>

@@ -12,12 +12,17 @@ export default function Menu() {
     );
   }, [id]);
 
-  const addToCart = (itemId) => {
-    API.post('/cart', {
+const addToCart = async (itemId) => {
+  try {
+    await API.post('/cart', {
       menuItemId: itemId,
       quantity: 1,
     });
-  };
+    alert('Added to cart');
+  } catch (err) {
+    alert(err.response?.data?.message);
+  }
+};
 
   return (
     // <div>
