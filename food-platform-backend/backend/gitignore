@@ -1,0 +1,412 @@
+# ===========================
+# Dependencies
+# ===========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ===========================
+# Environment Variables
+# ===========================
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+.env.test
+.env.*.local
+*.env
+*.env.local
+
+# ===========================
+# Logs
+# ===========================
+logs/
+*.log
+log.txt
+logs.txt
+access.log
+error.log
+combined.log
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+lerna-debug.log
+
+# ===========================
+# Database
+# ===========================
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.mongodb
+dump/
+mongodump/
+*.bson
+*.metadata.json
+
+# ===========================
+# Runtime Data
+# ===========================
+pids/
+*.pid
+*.seed
+*.pid.lock
+*.lock
+*.lock.json
+runtime/
+
+# ===========================
+# Coverage Directory
+# ===========================
+coverage/
+.nyc_output/
+*.lcov
+*.lcov.info
+.coveralls.yml
+__test__/coverage/
+jest-coverage/
+coverage.json
+
+# ===========================
+# Build Outputs
+# ===========================
+dist/
+build/
+out/
+.next/
+.nuxt/
+.gatsby/
+public/
+.cache/
+.parcel-cache/
+.turbo/
+*.tsbuildinfo
+
+# ===========================
+# IDE and Editor Files
+# ===========================
+# Visual Studio Code
+.vscode/
+.history/
+*.code-workspace
+.vscode-test/
+
+# WebStorm/IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+.sublime/
+
+# Vim
+*.swp
+*.swo
+*~
+.*.swp
+.*.swo
+.vim/
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Atom
+.atom/
+*.atom
+
+# ===========================
+# Operating System Files
+# ===========================
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.DS_Store
+*.AppleDouble
+*.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+.directory
+*.directory
+*~
+.dbus/
+.config/
+.local/
+.cache/
+.trash/
+
+# ===========================
+# Temporary Files
+# ===========================
+tmp/
+temp/
+.tmp/
+.temp/
+*.tmp
+*.temp
+*.cache
+.cache/
+*.swp
+*.swo
+*~
+*.bak
+*.backup
+*.old
+*.orig
+*.rej
+
+# ===========================
+# Testing
+# ===========================
+/test-results/
+/test-report/
+/e2e-report/
+/test/.nyc_output/
+/.jest/
+/.mochawesome/
+/test/coverage/
+/test/reports/
+__snapshots__/
+*.test.js
+*.spec.js
+*.snap
+
+# ===========================
+# Security & Secrets
+# ===========================
+*.pem
+*.key
+*.crt
+*.csr
+*.pfx
+*.p12
+*.jks
+*.keystore
+*.truststore
+.secrets/
+secrets/
+.secret
+*.secret
+credentials.json
+service-account.json
+.credentials/
+/.env-secrets/
+
+# ===========================
+# Docker
+# ===========================
+docker-compose.override.yml
+.dockerignore
+Dockerfile.dev
+.docker/
+docker/
+*.docker.tar.gz
+*.docker.tar
+*.docker.tgz
+
+# ===========================
+# Kubernetes
+# ===========================
+*.kubeconfig
+.kube/
+helm/values.local.yaml
+*.secret.yaml
+*.secrets.yaml
+
+# ===========================
+# CI/CD
+# ===========================
+/.github/tmp/
+/.github/cache/
+/.circleci/tmp/
+/.gitlab/tmp/
+/.travis/tmp/
+/.jenkins/
+/.teamcity/
+/.drone/
+/buildkite/
+/.codeclimate.yml
+/.codecov.yml
+/.coveralls.yml
+
+# ===========================
+# Local Development
+# ===========================
+.vercel/
+.netlify/
+.heroku/
+.cloud/
+.serverless/
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+.tfplan
+.envrc
+.direnv/
+.asdf/
+.nvmrc
+.python-version
+.ruby-version
+.golang-version
+
+# ===========================
+# Project Specific
+# ===========================
+# MongoDB Atlas backup files
+*.mongodb-backup
+*.json.gz
+
+# JWT secret files
+*.jwt-secret
+jwt-secret.txt
+
+# API documentation (if generated)
+apidoc/
+docs/generated/
+swagger.json
+swagger.yaml
+openapi.json
+openapi.yaml
+
+# Postman collections (if sensitive)
+postman/*.json
+*.postman_collection.json
+
+# Rate limiting data
+ratelimit-data/
+
+# Session data
+sessions/
+session-store/
+
+# Upload directories
+/uploads/
+/temp-uploads/
+/images/
+/photos/
+/public/uploads/
+private/uploads/
+
+# Report files
+reports/
+*.html
+*.pdf
+*.xlsx
+*.csv
+
+# ===========================
+# Debugging
+# ===========================
+debug.log
+debug/
+ndb/
+node-debug.log
+node-inspector.log
+profile.txt
+.heapsnapshot
+.heapsnapshot.*
+*.cpuprofile
+*.heapsnapshot
+v8.log
+
+# ===========================
+# Misc
+# ===========================
+*.tgz
+*.tar.gz
+*.zip
+*.rar
+*.7z
+*.gz
+.DS_Store
+.directory
+.fleet/
+.terraform/
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+.www/
+.eslintcache
+.stylelintcache
+.prettiercache
+.parcel-cache
+.webpack-cache
+.tscache
+*.log.[0-9]*
+*.log.[0-9][0-9]*
+*.log.[0-9][0-9][0-9]*
+
+# ===========================
+# Optional: Keep specific files
+# ===========================
+!.env.example
+!.gitkeep
+!.gitattributes
+!.npmrc
+!.yarnrc
+!.prettierrc
+!.eslintrc.json
+!.eslintignore
+!.prettierignore
+!.lintstagedrc
+!.huskyrc
+!.editorconfig
+!.babelrc
+!.browserslistrc
+
+# ===========================
+# Optional: Ignore large files
+# ===========================
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.mp3
+*.wav
+*.flac
+*.psd
+*.ai
+*.tiff
+*.raw
+*.heic
