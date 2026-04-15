@@ -8,6 +8,7 @@ import Orders from './pages/Orders';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminOrders from './pages/AdminOrders';
 
 function App() {
    console.log("carttttt");
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/admin" element={<AdminOrders />} />
 
         <Route
           path="/"

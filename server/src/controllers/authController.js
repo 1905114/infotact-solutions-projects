@@ -3,10 +3,14 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // Generate JWT
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '7d',
-  });
+const generateToken = (user) => {
+  return jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '7d',
+    }
+  );
 };
 
 // Signup
@@ -33,7 +37,7 @@ exports.registerUser = async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      token: generateToken(user._id),
+      token: generateToken(user),
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -53,7 +57,7 @@ exports.loginUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        token: generateToken(user._id),
+        token: generateToken(user),
       });
     } else {
       res.status(401).json({ message: 'Invalid credentials' });

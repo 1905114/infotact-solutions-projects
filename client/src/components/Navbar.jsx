@@ -1,15 +1,42 @@
-import { Link } from 'react-router-dom';
-import { logout } from '../'
+import { Link, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+
 export default function Navbar() {
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login'); // redirect after logout
+  };
+
   return (
     <div className="flex justify-between items-center px-6 py-4 bg-gray-900 border-b border-gray-800">
       <h1 className="text-xl font-bold">Foodie</h1>
 
-      <div className="flex gap-6">
-        <Link to="/">Home</Link>
-        <Link to="/cart">Cart</Link>
-        <Link to="/orders">Orders</Link>
-        <button onClick={logout}>Logout</button>
+      <div className="flex gap-6 items-center">
+        {user && (
+          <>
+            <Link to="/">Home</Link>
+            <Link to="/cart">Cart</Link>
+            <Link to="/orders">Orders</Link>
+
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 px-3 py-1 rounded-lg hover:opacity-80"
+            >
+              Logout
+            </button>
+          </>
+        )}
+
+        {!user && (
+          <>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
+          </>
+        )}
       </div>
     </div>
   );

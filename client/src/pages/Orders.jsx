@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import API from '../api/api';
 import socket from '../socket/socket';
+import { statusMap } from '../utils/statusMap'
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
-
+  const status = statusMap;
   const fetchOrders = () => {
     API.get('/order').then((res) =>
       setOrders(res.data)

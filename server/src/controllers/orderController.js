@@ -32,11 +32,29 @@ exports.createOrder = async (req, res) => {
 };
 
 // Get user orders
+// exports.getOrders = async (req, res) => {
+//   const orders = await Order.find({ user: req.user._id }).populate(
+//     'items.menuItem'
+//   );
+//   res.json(orders);
+// };
+
 exports.getOrders = async (req, res) => {
-  const orders = await Order.find({ user: req.user._id }).populate(
-    'items.menuItem'
-  );
-  res.json(orders);
+  try {
+    let orders;
+
+    // 👇 If admin → get all orders
+    if (req.user.role === 'admin') {
+      orders = await Order.find().populate('items.menuItem');
+    } else {
+      // 👇 If customer → only their orders
+      orders = await Order.find({ user: req.user._id }).populate('items.menuItem');
+    }
+
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 // Update order status (for restaurant)
@@ -52,10 +70,12 @@ exports.updateOrderStatus = async (req, res) => {
   order.status = status;
   await order.save();
 
-  // emit real-time updates
-  global.io.emit('orderUpdated',{
-    orderId:'order._id',
-    status:'order.status',
+  console.log("Order updated:", order.status); // 👈 add this
+
+  // 🔥 IMPORTANT: emit event
+  global.io.emit('orderUpdated', {
+    orderId: order._id,
+    status: order.status,
   });
 
   res.json(order);
