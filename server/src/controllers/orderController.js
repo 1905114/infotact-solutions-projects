@@ -1,82 +1,192 @@
+// const Order = require('../models/Order');
+// const Cart = require('../models/Cart');
+
+// // Create order from cart
+// exports.createOrder = async (req, res) => {
+//   try {
+//     const cart = await Cart.findOne({ user: req.user._id });
+
+//     if (!cart || cart.items.length === 0) {
+//       return res.status(400).json({ message: 'Cart is empty' });
+//     }
+
+//     const order = await Order.create({
+//       user: req.user._id,
+//       restaurant: cart.restaurant,
+//       items: cart.items,
+//     });
+
+// // emit real time updates
+//     global.io.emit('newOrder', {
+//         orderId: order._id,
+//         user: order.user,
+//     });
+
+//     // Clear cart after order
+//     await Cart.findOneAndDelete({ user: req.user._id });
+
+//     res.status(201).json(order);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+
+// // Get user orders
+// // exports.getOrders = async (req, res) => {
+// //   const orders = await Order.find({ user: req.user._id }).populate(
+// //     'items.menuItem'
+// //   );
+// //   res.json(orders);
+// // };
+
+// exports.getOrders = async (req, res) => {
+//   try {
+//     let orders;
+
+//     // 👇 If admin → get all orders
+//     if (req.user.role === 'admin') {
+//       orders = await Order.find().populate('items.menuItem');
+//     } else {
+//       // 👇 If customer → only their orders
+//       orders = await Order.find({ user: req.user._id }).populate('items.menuItem');
+//     }
+
+//     res.json(orders);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+
+// // Update order status (for restaurant)
+// exports.updateOrderStatus = async (req, res) => {
+//   const { status } = req.body;
+
+//   const order = await Order.findById(req.params.id);
+
+//   if (!order) {
+//     return res.status(404).json({ message: 'Order not found' });
+//   }
+
+//   order.status = status;
+//   await order.save();
+
+//   console.log("Order updated:", order.status); // 👈 add this
+
+//   // 🔥 IMPORTANT: emit event
+//   global.io.emit('orderUpdated', {
+//     orderId: order._id,
+//     status: order.status,
+//   });
+
+//   res.json(order);
+// };
+
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
+const MenuItem = require('../models/MenuItem');
+const Restaurant = require('../models/Restaurant');
 
-// Create order from cart
+
+// 📦 Create Order
 exports.createOrder = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user: req.user._id });
+    const cart = await Cart.findOne({ user: req.user._id })
+      .populate('items.menuItem');
 
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ message: 'Cart is empty' });
     }
 
+    // 🔥 Calculate total price
+    let totalPrice = 0;
+    cart.items.forEach((item) => {
+      totalPrice += item.menuItem.price * item.quantity;
+    });
+
     const order = await Order.create({
       user: req.user._id,
       restaurant: cart.restaurant,
       items: cart.items,
+      totalPrice,
     });
 
-// emit real time updates
-    global.io.emit('newOrder', {
-        orderId: order._id,
-        user: order.user,
-    });
+    // 🔥 Emit real-time event
+    global.io.emit('newOrder', order);
 
-    // Clear cart after order
+    // 🧹 Clear cart
     await Cart.findOneAndDelete({ user: req.user._id });
 
     res.status(201).json(order);
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Get user orders
-// exports.getOrders = async (req, res) => {
-//   const orders = await Order.find({ user: req.user._id }).populate(
-//     'items.menuItem'
-//   );
-//   res.json(orders);
-// };
 
+// 📄 Get Orders (Customer + Admin)
 exports.getOrders = async (req, res) => {
   try {
-    let orders;
+    console.log("User:", req.user);
 
-    // 👇 If admin → get all orders
-    if (req.user.role === 'admin') {
-      orders = await Order.find().populate('items.menuItem');
-    } else {
-      // 👇 If customer → only their orders
-      orders = await Order.find({ user: req.user._id }).populate('items.menuItem');
+    // 👤 CUSTOMER FLOW
+    if (req.user.role === 'user') {
+      const orders = await Order.find({ user: req.user._id })
+        .populate('items.menuItem');
+
+      return res.json(orders);
     }
 
-    res.json(orders);
+    // 🍳 ADMIN FLOW
+    if (req.user.role === 'admin') {
+      const restaurants = await Restaurant.find({ owner: req.user._id });
+      const restaurantIds = restaurants.map(r => r._id);
+
+      const orders = await Order.find({
+        restaurant: { $in: restaurantIds },
+      }).populate('items.menuItem');
+
+      return res.json(orders);
+    }
+
+    res.status(400).json({ message: 'Invalid role' });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Update order status (for restaurant)
+
+// 🔄 Update Order Status (Restaurant Owner Only)
 exports.updateOrderStatus = async (req, res) => {
-  const { status } = req.body;
+  try {
+    const { status } = req.body;
 
-  const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id);
 
-  if (!order) {
-    return res.status(404).json({ message: 'Order not found' });
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    const restaurant = await Restaurant.findById(order.restaurant);
+
+    // 🔥 Ownership check
+    if (restaurant.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    order.status = status;
+    await order.save();
+
+    // 🔥 Emit real-time update
+    global.io.emit('orderUpdated', {
+      orderId: order._id,
+      status: order.status,
+    });
+
+    res.json(order);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-
-  order.status = status;
-  await order.save();
-
-  console.log("Order updated:", order.status); // 👈 add this
-
-  // 🔥 IMPORTANT: emit event
-  global.io.emit('orderUpdated', {
-    orderId: order._id,
-    status: order.status,
-  });
-
-  res.json(order);
 };

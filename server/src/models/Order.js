@@ -24,6 +24,10 @@ const orderSchema = new mongoose.Schema(
       enum: ['placed', 'accepted', 'preparing', 'out_for_delivery','delivered',],
       default: 'placed',
     },
+    totalPrice: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );
