@@ -10,14 +10,19 @@ const restaurantSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
     location: {
-      type: String, // keep simple for now
-      required: true,
+      type: {
+        type: String,
+        enum: ['Point'],
+        required: true,
+      },
+      coordinates: {
+        type: [Number], // [lng, lat]
+        required: true,
+      },
     },
-    rating: {
-      type: Number,
-      default: 0,
-    },
+
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -25,5 +30,8 @@ const restaurantSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// 🔥 IMPORTANT
+restaurantSchema.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('Restaurant', restaurantSchema);

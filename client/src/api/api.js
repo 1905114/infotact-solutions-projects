@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://vigilant-meme-p49qgrppr4r26gjv-5000.app.github.dev/api',
+  baseURL: 'https://cautious-space-winner-g9gv5545r99h94vw-5000.app.github.dev/api',
 });
 
 // Attach token automatically
