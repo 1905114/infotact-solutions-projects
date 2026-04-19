@@ -12,16 +12,22 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminOrders from './pages/AdminOrders';
 import CreateRestaurant from './pages/CreateRestaurant';
 import AdminRoute from './components/AdminRoute';
+import Layout from './components/Layout';
+// import Home from './pages/Home';
+
 function App() {
-   console.log("carttttt");
+  
   return (
     <BrowserRouter>
-      <Navbar />
+    <Navbar /> 
+    {/* <Layout> */}
+      
 
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<AdminOrders />} />
+        {/* <Route path="/" element={<Home />} /> */}
         {/* <Route path="/create-restaurant" element={<CreateRestaurant />} /> */}
        <Route
   path="/create-restaurant"
@@ -68,7 +74,9 @@ function App() {
           }
         />
       </Routes>
+      {/* </Layout> */}
     </BrowserRouter>
+    
   );
 }
 
