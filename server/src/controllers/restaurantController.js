@@ -56,6 +56,34 @@ exports.createRestaurant = async (req, res) => {
 //   }
 // };
 
+// exports.getRestaurants = async (req, res) => {
+//   try {
+//     const { lat, lng } = req.query;
+
+//     let restaurants;
+
+//     if (lat && lng) {
+//       restaurants = await Restaurant.find({
+//         location: {
+//           $near: {
+//             $geometry: {
+//               type: 'Point',
+//               coordinates: [parseFloat(lng), parseFloat(lat)],
+//             },
+//             $maxDistance: 5000, // 5 km
+//           },
+//         },
+//       });
+//     } else {
+//       restaurants = await Restaurant.find();
+//     }
+
+//     res.json(restaurants);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+
 exports.getRestaurants = async (req, res) => {
   try {
     const { lat, lng } = req.query;
@@ -63,17 +91,19 @@ exports.getRestaurants = async (req, res) => {
     let restaurants;
 
     if (lat && lng) {
-      restaurants = await Restaurant.find({
-        location: {
-          $near: {
-            $geometry: {
+      restaurants = await Restaurant.aggregate([
+        {
+          $geoNear: {
+            near: {
               type: 'Point',
               coordinates: [parseFloat(lng), parseFloat(lat)],
             },
-            $maxDistance: 5000, // 5 km
+            distanceField: 'distance',
+            maxDistance: 5000, // 5 km
+            spherical: true,
           },
         },
-      });
+      ]);
     } else {
       restaurants = await Restaurant.find();
     }

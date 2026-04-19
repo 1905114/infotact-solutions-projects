@@ -6,12 +6,34 @@ export default function Restaurants() {
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    API.get('/restaurants').then((res) =>
-      setRestaurants(res.data)
-    );
-  }, []);
+  // useEffect(() => {
+  //   API.get('/restaurants').then((res) =>
+  //     setRestaurants(res.data)
+  //   );
+  // }, []);
 
+  useEffect(() => {
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const { latitude, longitude } = pos.coords;
+
+      console.log('User Location:', latitude, longitude);
+
+      const res = await API.get(
+        `/restaurants?lat=${latitude}&lng=${longitude}`
+      );
+
+      console.log('API Data:', res.data);
+
+      setRestaurants(res.data);
+    },
+    async () => {
+      // fallback if permission denied
+      const res = await API.get('/restaurants');
+      setRestaurants(res.data);
+    }
+  );
+}, []);
   return (
     // <div>
     //   <h2>Restaurants</h2>
@@ -32,6 +54,11 @@ export default function Restaurants() {
     >
       <h3 className="text-xl font-semibold">{r.name}</h3>
       <p className="text-gray-400">{r.cuisine}</p>
+      <p className="text-sm text-gray-400">
+      {r.distance < 1000
+        ? `${Math.round(r.distance)} m away`
+        : `${(r.distance / 1000).toFixed(1)} km away`}
+      </p>
     </div>
   ))}
 </div>

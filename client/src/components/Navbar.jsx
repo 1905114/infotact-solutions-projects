@@ -18,9 +18,11 @@ export default function Navbar() {
       <div className="flex gap-6 items-center">
         {user && (
           <>
-            <Link to="/">Home</Link>
-            <Link to="/cart">Cart</Link>
-            <Link to="/orders">Orders</Link>
+          <Link to="/" className="flex">Home</Link>
+          <Link to="/cart" className="flex">Cart</Link>
+          <Link to="/orders" className="flex">Orders</Link>
+          <Link to="/create-restaurant" className="flex">Create Restaurant</Link>
+          <Link to="/admin" className="flex">Restaurant orders</Link>
 
             <button
               onClick={handleLogout}
