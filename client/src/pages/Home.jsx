@@ -1,8 +1,17 @@
-import { useEffect, useState } from "react";
-import axios from "../api/api";
-import RestaurantCard from "../components/RestaurantCard";
-import Loader from "../components/ui/Loader";
+import CuisineCarousel from "../components/CuisineCarousel";
+import Restaurants from "./Restaurants";
+import BestCuisines from "../components/BestCuisines";
 
 export default function Home() {
-  return <div className="text-white p-10">Home Working</div>;
+  return (
+    <div>
+
+      <CuisineCarousel />
+
+      <Restaurants />
+
+      <BestCuisines />
+
+    </div>
+  );
 }

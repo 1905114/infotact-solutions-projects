@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://vigilant-meme-p49qgrppr4r26gjv-5000.app.github.dev/api',
+  baseURL: 'https://supreme-yodel-pvx5ggjggqp37q6j-5000.app.github.dev/api',
 });
 
 // attach token automatically

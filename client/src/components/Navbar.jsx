@@ -44,80 +44,126 @@
 //   );
 // }
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { ShoppingCart, User, Search, MapPin } from "lucide-react";
+import { useCart } from "../context/CartContext";
+import { motion } from "framer-motion";
 
-const Navbar = () => {
-  const { user } = useContext(AuthContext);
-
+export default function Navbar() {
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { cartCount } = useCart();
+  
   return (
-    <nav className="bg-card shadow-md sticky top-0 z-50">
+    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-border shadow-sm">
 
-      {/* 🧱 CONTAINER (IMPORTANT FIX) */}
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
-        {/* 🔥 LEFT */}
-        <div className="flex items-center gap-6 flex-shrink-0">
+        {/* 🔥 LEFT — BRAND + LOCATION */}
+        <div className="flex items-center gap-6">
 
-          <Link to="/" className="text-2xl font-bold text-primary">
-            Foodie
-          </Link>
+       <Link className="text-xl font-semibold tracking-tight text-primary">
+  Foodie
+</Link>
 
-          <div className="hidden md:flex items-center text-sm text-muted">
-            <span className="mr-1">📍</span>
-            <span>Pune</span>
+          {/* 📍 LOCATION */}
+          <div className="hidden md:flex items-center gap-2 cursor-pointer group">
+            <MapPin size={18} className="text-primary" />
+
+            <div className="flex flex-col leading-tight">
+              <span className="text-xs text-muted-foreground">
+                Deliver to
+              </span>
+              <span className="text-sm font-medium group-hover:text-primary transition">
+                Pune
+              </span>
+            </div>
           </div>
 
         </div>
 
-        {/* 🔍 CENTER (FIXED RESPONSIVE WIDTH) */}
-        <div className="hidden md:flex flex-1 max-w-xl">
-          <input
-            type="text"
-            placeholder="Search restaurants..."
-            className="w-full px-4 py-2 rounded-lg bg-bg border border-gray-700 focus:outline-none focus:border-primary"
-          />
+        {/* 🔍 CENTER — SEARCH (upgraded) */}
+        <div className="hidden md:flex flex-1 max-w-lg mx-8">
+
+          <div className="flex items-center w-full bg-muted rounded-full px-4 py-2.5 
+          focus-within:ring-2 focus-within:ring-primary/20 transition">
+
+            <Search size={18} className="text-muted-foreground mr-3" />
+
+            <input
+              type="text"
+              placeholder="Search for restaurants, cuisines..."
+              className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+            />
+          </div>
+
         </div>
 
         {/* 👉 RIGHT */}
-        <div className="flex items-center gap-5 flex-shrink-0">
+        <div className="flex items-center gap-6">
 
-          <Link to="/" className="text-muted hover:text-white transition">
-            Home
-          </Link>
-
-          <Link to="/orders" className="text-muted hover:text-white transition">
-            Orders
-          </Link>
-
-          {/* 🛒 Cart */}
-          <Link to="/cart" className="relative">
-            <span className="text-xl">🛒</span>
-            <span className="absolute -top-2 -right-2 bg-primary text-xs px-1.5 py-0.5 rounded-full">
-              2
-            </span>
-          </Link>
-
-          {/* 👤 Auth */}
           {user ? (
-            <span className="text-sm text-muted hidden sm:block">
-              Hi, {user.name}
-            </span>
+            <>
+              {/* 🛒 CART */}
+              <Link to="/cart" className="relative group">
+                <ShoppingCart className="text-foreground/70 group-hover:text-primary transition" />
+
+              {cartCount > 0 && (
+                 <motion.span
+  key={cartCount}
+  initial={{ scale: 0.5 }}
+  animate={{ scale: [1.3, 1] }}
+  transition={{ duration: 0.25 }}
+  className="absolute -top-2 -right-2 bg-black text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full shadow"
+>
+  {cartCount}
+</motion.span>
+                )}
+              </Link>
+
+              {/* 👤 USER */}
+              <div className="hidden sm:flex items-center gap-2 text-sm">
+                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                  <User size={16} />
+                </div>
+                <span className="body-sm">
+  {user.name}
+</span>
+              </div>
+
+              {/* 🚪 LOGOUT */}
+              <button
+                onClick={() => {
+                  logout();
+                  navigate("/login");
+                }}
+                className="text-sm text-muted-foreground hover:text-primary transition"
+              >
+                Logout
+              </button>
+            </>
           ) : (
-            <Link
-              to="/login"
-              className="bg-primary px-4 py-2 rounded-lg text-white"
-            >
-              Login
-            </Link>
+            <>
+              <Link
+                to="/login"
+                className="text-sm text-muted-foreground hover:text-primary"
+              >
+                Login
+              </Link>
+
+              <Link
+                to="/register"
+                className="bg-primary text-white px-4 py-2 rounded-full text-sm hover:opacity-90 transition"
+              >
+                Sign up
+              </Link>
+            </>
           )}
 
         </div>
-
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}

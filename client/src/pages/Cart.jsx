@@ -13,7 +13,7 @@ export default function Cart() {
 
  const placeOrder = async () => {
   try {
-    alert("Button clicked"); // 👈 confirms click
+    // alert("Button clicked"); // 👈 confirms click
 
     const res = await API.post('/order');
 

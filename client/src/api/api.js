@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://cautious-space-winner-g9gv5545r99h94vw-5000.app.github.dev/api',
+  baseURL: 'https://supreme-yodel-pvx5ggjggqp37q6j-5000.app.github.dev/api',
 });
 
 // Attach token automatically

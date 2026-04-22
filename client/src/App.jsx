@@ -13,20 +13,24 @@ import AdminOrders from './pages/AdminOrders';
 import CreateRestaurant from './pages/CreateRestaurant';
 import AdminRoute from './components/AdminRoute';
 import Layout from './components/Layout';
-// import Home from './pages/Home';
-
+import Home from './pages/Home';
+import CuisinePage from './pages/CuisinePage';
+import { CartProvider } from './context/CartContext';
 function App() {
   
   return (
     <BrowserRouter>
+    {/* <CartProvider> */}
     <Navbar /> 
+    {/* </CartProvider> */}
     {/* <Layout> */}
-      
-
+    
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<AdminOrders />} />
+        <Route path="/" element={<Home />} />
+<Route path="/cuisine/:name" element={<CuisinePage />} />
         {/* <Route path="/" element={<Home />} /> */}
         {/* <Route path="/create-restaurant" element={<CreateRestaurant />} /> */}
        <Route
@@ -37,14 +41,14 @@ function App() {
     // </AdminRoute>
   }
 />
-        <Route
+        {/* <Route
           path="/"
           element={
             <ProtectedRoute>
               <Restaurants />
             </ProtectedRoute>
           }
-        />
+        /> */}
 
 
         <Route
@@ -75,6 +79,7 @@ function App() {
         />
       </Routes>
       {/* </Layout> */}
+      
     </BrowserRouter>
     
   );
